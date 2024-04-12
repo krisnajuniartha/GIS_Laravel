@@ -72,7 +72,7 @@ class ApiController extends Controller
                 'message' => 'Could not create token.',
             ], 500);
         }
-
+        //Userrrr
         //$user = JWTAuth::authenticate("Bearer $token");
         $user = JWTAuth::user()->only('id', 'email', 'name');
         //Token created, return with success response and jwt token
