@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DataController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,8 +24,7 @@ Route::get('/index', function () {
     return view('frontend.index');
 });
 
-Route::resource('/data',Backend::class);
-Route::get('/index', [Backend::class, 'index']);
+
 
 // Route untuk halaman login (GET)
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -34,4 +34,15 @@ Route::post('/', [AuthController::class, 'login']);
 // Route untuk halaman register
 Route::get('/register', [AuthController::class, 'create'])->name('register');
 Route::post('/register', [AuthController::class, 'store']);
+
+
+Route::resource('/data',DataController::class);
+Route::get('/index', [DataController::class, 'getData']);
+Route::post('/store-data', [DataController::class, 'storeData'])->name('storeData');
+Route::get('/getMarker', [DataController::class, 'getMarker'])->name('getMarker');
+
+
+
+
+
 

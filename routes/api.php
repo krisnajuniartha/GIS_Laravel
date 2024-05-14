@@ -25,7 +25,12 @@ Route::post('register', [ApiController::class, 'register']);
 Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('logout', [ApiController::class, 'logout']);
     Route::get('getuser', [ApiController::class, 'get_user']);
-    /**
-      * Silahkan tambahkan route anda disini ...
-    */
+
+    Route::get('tb_rs', [ApiController::class, 'tb_rs']);
+    Route::post('add-data', [ApiController::class,'addData']);
+    Route::delete('data/{id}', [ApiController::class, 'deleteRS']);
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 });

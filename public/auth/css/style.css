@@ -1231,3 +1231,9 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+.logo-img-large {
+  width: 150px; /* Sesuaikan dengan ukuran yang Anda inginkan */
+  height: auto; /* Menjaga aspek rasio gambar */
+  object-fit: contain; /* Memastikan gambar tidak terdistorsi */
+}

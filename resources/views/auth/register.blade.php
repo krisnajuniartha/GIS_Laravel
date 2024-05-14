@@ -10,7 +10,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
+  <link href="frontend/img/icon_web.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -44,8 +44,7 @@
 
               <div class="d-flex justify-content-center py-4">
                 <a href="index.html" class="logo d-flex align-items-center w-auto">
-                    <img src="{{ asset('backend/assets/img/logo.png') }}" alt="">
-                  <span class="d-none d-lg-block">SIG</span>
+                    <img src="{{ asset('frontend/img/icon_web.png') }}" alt="" class="logo-img-large">
                 </a>
               </div><!-- End Logo -->
 

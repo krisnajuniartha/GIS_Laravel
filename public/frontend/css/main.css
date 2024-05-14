@@ -1697,106 +1697,117 @@ section {
   color: var(--color-primary);
 }
 
+
+/*--------------------------------------------------------------
+# Drop Down
+--------------------------------------------------------------*/
+
+.header-nav .nav-profile {
+  color: #012970;
+}
+
+.header-nav .nav-profile img {
+  max-height: 36px;
+}
+
+.header-nav .nav-profile span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.header-nav .profile .dropdown-header h6 {
+  font-size: 18px;
+  margin-bottom: 0;
+  font-weight: 600;
+  color: #444444;
+}
+
+.header-nav .profile .dropdown-header span {
+  font-size: 14px;
+}
+
+.header-nav .profile .dropdown-item {
+  font-size: 14px;
+  padding: 10px 15px;
+  transition: 0.3s;
+}
+
+.header-nav .profile .dropdown-item i {
+  margin-right: 10px;
+  font-size: 18px;
+  line-height: 0;
+}
+
+.header-nav .profile .dropdown-item:hover {
+  background-color: #f6f9ff;
+}
+
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
-.hero {
+#hero {
   width: 100%;
-  min-height: 50vh;
-  background-color: var(--color-secondary);
-  background-image: url("../img/hero-bg.png");
+  height: 100vh;
+  background: url("../img/rumahsakit.jpg") top center;
   background-size: cover;
-  background-position: center;
-  position: relative;
-  padding: 120px 0 60px 0;
-  color: rgba(255, 255, 255, 0.8);
 }
 
-.hero h2 {
-  margin-bottom: 20px;
-  padding: 0;
-  font-size: 48px;
+#hero:before {
+  content: "";
+  background: rgba(5, 13, 24, 0.3);
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+#hero .hero-container {
+  position: relative;
+  z-index: 2;
+  min-width: 300px;
+}
+
+#hero h1 {
+  margin: 0 0 10px 0;
+  font-size: 64px;
   font-weight: 700;
+  line-height: 56px;
   color: #fff;
 }
 
-@media (max-width: 575px) {
-  .hero h2 {
-    font-size: 30px;
+#hero p {
+  color: #fff;
+  margin-bottom: 50px;
+  font-size: 26px;
+  font-family: "Poppins", sans-serif;
+}
+
+#hero p span {
+  color: #fff;
+  padding-bottom: 4px;
+  letter-spacing: 1px;
+  border-bottom: 3px solid #149ddd;
+}
+
+@media (min-width: 1024px) {
+  #hero {
+    background-attachment: fixed;
   }
 }
 
-.hero p {
-  font-size: 15px;
-  font-weight: 400;
-  margin-bottom: 40px;
-}
+@media (max-width: 768px) {
+  #hero h1 {
+    font-size: 28px;
+    line-height: 36px;
+  }
 
-.hero form {
-  background: #fff;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.hero form .form-control {
-  padding-top: 18px;
-  padding-bottom: 18px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border: none;
-  margin-right: 10px;
-  border: none !important;
-  background: none !important;
-}
-
-.hero form .form-control:hover,
-.hero form .form-control:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.hero form .btn-primary {
-  background-color: var(--color-primary);
-  padding: 15px 30px;
-}
-
-.hero form .btn-primary:hover {
-  background-color: #2756ff;
-}
-
-.hero .stats-item {
-  padding: 30px;
-  width: 100%;
-}
-
-.hero .stats-item span {
-  font-size: 32px;
-  display: block;
-  font-weight: 700;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  position: relative;
-}
-
-.hero .stats-item span:after {
-  content: "";
-  position: absolute;
-  display: block;
-  width: 20px;
-  height: 3px;
-  background: var(--color-primary);
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.hero .stats-item p {
-  padding: 0;
-  margin: 0;
-  font-family: var(--font-primary);
-  font-size: 15px;
-  font-weight: 600;
+  #hero h2 {
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 30px;
+  }
 }
 
 /*--------------------------------------------------------------
@@ -1975,4 +1986,49 @@ section {
 .nama-rs {
     font-weight: bold;
     font-size: large;
+}
+
+.section-title {
+  display: flex;
+  justify-content: center; /* Menengah secara horizontal */
+  align-items: center; /* Menengah secara vertikal, jika elemen memiliki tinggi tertentu */
+  text-align: center; /* Menengah teks di dalam elemen h2 */
+  height: 100px; /* Sesuaikan dengan kebutuhan Anda */
+}
+
+/*--------------------------------------------------------------
+# Table
+--------------------------------------------------------------*/
+
+ /* Menetapkan ukuran gambar tetap dan menjaga aspek rasio */
+ .data_rs img {
+  width: 100px; /* Sesuaikan dengan kebutuhan Anda */
+  height: 100px; /* Sesuaikan dengan kebutuhan Anda */
+  object-fit: cover; /* Memastikan gambar menutupi area tanpa distorsi */
+}
+
+/* Menengah elemen di dalam .section-title */
+.section-title {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Style tambahan untuk tabel */
+#rsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#rsTable th, #rsTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#rsTable th {
+  background-color: #f2f2f2;
+  text-align: center;
+}
+
+#rsTable td {
+  text-align: center;
 }

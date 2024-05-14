@@ -23,7 +23,7 @@
 
 
   <!-- Favicons -->
-  <link href="{{ asset('frontend/img/location.png') }}" rel="icon">
+  <link href="{{ asset('frontend/img/icon_web.png') }}" rel="icon">
   <link href="{{ asset('frontend/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -39,33 +39,10 @@
   <link href="{{ asset('frontend/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
   <link href="{{ asset('frontend/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
   <link href="{{ asset('frontend/vendor/aos/aos.css') }}" rel="stylesheet">
->
   <link href="{{ asset('frontend/css/main.css') }}" rel="stylesheet">
 
-  <style>
-   /* #mapid { height: 500px; }
+  
 
-      .leaflet-popup-content {
-          width: 250px;
-          height: 100px;
-      }
-
-      .col {
-          float: left;
-          width: 35%;
-      }
-      .col2 {
-          float: left;
-          width: 65%;
-          text-align: right;
-      }
-      .row:after {
-          content: "";
-          display: table;
-          clear: both;
-      } */
-
-  </style>
 </head>
 
 <body>
@@ -83,31 +60,53 @@
       <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
       <nav id="navbar" class="navbar">
-        <ul>
-          <li><a href="index.html" class="active">Home</a></li>
-        </ul>
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{{ asset('frontend/img/krisnaa.jpg') }}" alt="Profile" class="rounded-circle img-thumbnail" style="width: 40px; height: 40px;">
+            <span class="d-none d-md-block dropdown-toggle ps-2">User</span>
+        </a><!-- End Profile Iamge Icon -->
+        
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Krisna</h6>
+              <span>Web Designer</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{{ url('/') }}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
       </nav><!-- .navbar -->
 
     </div>
   </header><!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="hero d-flex align-items-center">
-    <div class="container">
-
-        <div class="image_hero">
-          <img src="{{ asset('frontend/img/kawaine.png') }}">
-        </div>
-
+  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+    <div class="hero-container" data-aos="fade-in">
+      <h1>GIS Rumah Sakit</h1>
+      <p>by <span class="typed" data-typed-items="K, R, I, S, N, A, Krisna"></span></p>
     </div>
-  </section><!-- End Hero Section -->
+  </section><!-- End Hero -->
 
   <main id="main">
 
     <section id = "home" class = "home">
       <div class = "grid">
           <div class = "map1">
-
+            <div class="section-title">
+              <h2>Leaflet Map</h2>
+            </div>
             <div id="mapid"></div>
             <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.min.js"></script>
 
@@ -158,63 +157,100 @@
 
               L.control.layers(baseLayers).addTo(mymap);
 
-              // Array markers
-              var markers = [];
-      
-              // Is On Drag
+                  var markers = [];
               var isOnDrag = false;
+              var myIcon = L.icon({
+                iconUrl: 'frontend/img/icon_web.png',
+                iconSize: [35, 40],
+                iconAnchor: [20, 40],
+              });
 
-              function createMarker(latlng, index) {
-              var marker = L.marker(latlng, { draggable: true }).addTo(mymap);
-              var popup = L.popup({ offset: [0, -30] }).setLatLng(latlng);
+              // Format popup content
+              formatContent = function(lat, lng, index) {
+                return `
+                    <div class="wrapper">
+                        <div class="row">
+                            <div class="cell merged" style="text-align:center">Marker [ ${index+1} ]</div>
+                        </div>
+                        <div class="row">
+                            <div class="col">Latitude</div>
+                            <div class="col2">${lat}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col">Longitude</div>
+                            <div class="col2">${lng}</div>
+                        </div>
 
-              marker.on('click', function() {
-                  popup.setLatLng(marker.getLatLng());
-                  updatePopupContent(marker, index);
-              });
-              marker.on('drag', function() {
-                  popup.setLatLng(marker.getLatLng());
-                  updatePopupContent(marker, index);
-              });
-              marker.on('dragstart', function() { isOnDrag = true; });
-              marker.on('dragend', function() {
-                  setTimeout(function() { isOnDrag = false; }, 500);
-              });
-              marker.on('contextmenu', function() {
-                  markers.splice(index, 1);
-                  mymap.removeLayer(marker);
-              });
-              return marker;
+                    </div>
+                `;
               }
 
-              function updatePopupContent(marker, index) {
-              var lat = marker.getLatLng().lat.toFixed(6);
-              var lng = marker.getLatLng().lng.toFixed(6);  
+              addMarker = function(latlng, index) {
 
-              var content = `
-                        <div class="popup-content">
-                          <div class="popup-row">Marker [${index + 1}]</div>
-                          <div class="popup-row"><span class="popup-col">Latitude:</span>${lat}</div>
-                          <div class="popup-row"><span class="popup-col">Longitude:</span>${lng}</div>
-                        </div>
-              `;
-              // Memindahkan konten popup ke dalam div dengan id 'info'
-              document.getElementById('info').innerHTML = content;
-              // document.getElementById('dataContainer').innerHTML = content;
-              marker.getPopup().setContent(content);
+                // Menambahkan marker
+                var marker = L.marker(latlng, {
+                  icon: myIcon,
+                  draggable: true
+                }).addTo(mymap);
+
+                // Membuat popup baru
+                var popup = L.popup({
+                    offset: [0, -30]
+                  })
+                  .setLatLng(latlng);
+
+                // Binding popup ke marker
+                marker.bindPopup(popup);
+
+                // Menambahkan event listener pada marker
+                marker.on('click', function() {
+                  popup.setLatLng(marker.getLatLng()),
+                    popup.setContent(formatContent(marker.getLatLng().lat, marker.getLatLng().lng, index));
+                });
+
+                marker.on('dragstart', function(event) {
+                  isOnDrag = true;
+                });
+
+                // Menambahkan event listener pada marker
+                marker.on('drag', function(event) {
+                  popup.setLatLng(marker.getLatLng()),
+                    popup.setContent(formatContent(marker.getLatLng().lat, marker.getLatLng().lng, index));
+                  marker.openPopup();
+                });
+
+                marker.on('dragend', function(event) {
+                  setTimeout(function() {
+                    isOnDrag = false;
+                  }, 500);
+                });
+
+                marker.on('contextmenu', function(event) {
+                  // Hapus semua marker dari array markers
+                  markers.forEach(function(m, i) {
+                    if (marker == m) {
+                      m.removeFrom(mymap); // hapus marker dari peta
+                      markers.splice(i, 1);
+                    }
+                  });
+                  //console.log(markers);
+                });
+
+                // Return marker
+                return marker;
               }
 
               // Tambahkan event listener click pada peta
               mymap.on('click', function(e) {
                 console.log(isOnDrag);
-                    if(!isOnDrag){
-                        // Buat marker baru
-                        var newMarker = addMarker(e.latlng,markers.length);
-                        
-                        // Tambahkan marker ke array markers
-                        markers.push(newMarker);
+                if (!isOnDrag) {
+                  // Buat marker baru
+                  var newMarker = addMarker(e.latlng, markers.length);
+
+                  // Tambahkan marker ke array markers
+                  markers.push(newMarker);
                   console.log(markers);
-                  }
+                }
               });
 
             </script>
@@ -222,73 +258,66 @@
 
           <div class="buttonDataMain">
             <div class="buttonData">
-              <button onclick= "getData()">Tampilkan RS</button>
-              <!-- <button onclick="resetMarkers()">Reset</button> -->
+              <button onclick="getMarker()" type="button" class="btn btn-dark">Tampilkan Marker</button>
+              <button onclick="resetMarkers()" type="button" class="btn btn-dark">Reset Marker</button>
             </div>
           </div>
 
           <div class="data">
-              <div class ="dataPopup">
-                  <img src= `${item.foto_rs}` />
-              </div>
-              <script>
-                function getData() {
-                  // Mengambil data dari server Node.js menggunakan AJAX
-                  const database = new XMLHttpRequest();
-                  database.open('GET', 'http://localhost:5000/getData');
-                  database.onload = function() {
-                      if (database.status === 200) {
-                        const data = JSON.parse(database.responseText);
-                        // Loop melalui setiap item data
-                        data.forEach(item => {
-                        // Pisahkan data LatLng menjadi nilai latitude dan longitude
-                        const latlng = item.latlng.split(',');
-                        const latitude = parseFloat(latlng[0]);
-                        const longitude = parseFloat(latlng[1]);
-
-                        // Buat marker pada peta menggunakan nilai latitude dan longitude
-                        const marker = L.marker([latitude, longitude]).addTo(mymap);
-                        // marker.bindPopup(`<b>Nama RS:</b> ${item.nama_rs}<br><b>Alamat:</b> ${item.alamat_rs}`);
-                        marker.bindPopup(`<div class="popup-content">
-                                    <div class="popup-row"><span class="popup-col"> </span><img class = "foto-rs" src= ${item.foto_rs} /></div>
-                                    <div class="popup-row"><span class="popup-col">ID RS: ${item.id_rs} </span> </div>
-                                    <div class="popup-row"><span class="nama-rs">Nama RS: ${item.nama_rs} </span> </div>
-                                    <div class="popup-row"><span class="popup-col">Kelas: ${item.tipe_rs} </span> </div>
-                                    <div class="popup-row"><span class="popup-col">LatLng: ${item.latlng} </span> </div>
-                                </div>`);
-                        });
-                        // Tampilkan data dalam format popup
-                        var content = '';
-                        data.forEach(item => {
-                            content += `
-                                <div class="popup-content">
-                                    <span></span>
-                                    <div class="popup-row"><span class="popup-col">ID RS:</span> ${item.id_rs}</div>
-                                    <div class="popup-row"><span class="popup-col">Name:</span> ${item.nama_rs}</div>
-                                    <div class="popup-row"><span class="popup-col">Kelas:</span> ${item.tipe_rs}</div>
-                                    <div class="popup-row"><span class="popup-col">LatLng:</span> ${item.latlng}</div>
-                                    <div class="popup-row"><span class="popup-col">Alamat:</span> ${item.alamat_rs}</div>
-                                    <div class="popup-row"><span class="popup-col">Gambar:</span> ${item.foto_rs}</div>
-                                      <br>
-                                      <span></span>
-                                      <span>
-                                        <img src="http://localhost:3000/getImage/${item.id_rs} "style="max-width: 400px; max-height: 300px;"></div>
-                                        </span>
-                                    <span></span>
-                                </div>
-                            `;
-                        });
-                      } else {
-                          console.error('Failed to fetch data:', database.statusText);
-                      }
-                    };
-                    database.onerror = function() {
-                        console.error('Request failed:', database.statusText);
-                    };
-                    database.send();
+            <script>
+                function getMarker() {
+                    var rsIcon = L.icon({
+                        iconUrl: 'frontend/img/rs_icon.png',
+                        iconSize: [35, 40],
+                        iconAnchor: [20, 40],
+                    });
+                    fetch("{{ route('getMarker') }}")
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(item => {
+                                var latlng = item.latlng.split(',');
+                                var latitude = parseFloat(latlng[0]);
+                                var longitude = parseFloat(latlng[1]);
+        
+                                // Buat marker pada peta menggunakan nilai latitude dan longitude
+                                var marker = L.marker([latitude, longitude], { icon: rsIcon }).addTo(mymap);
+                                marker.bindPopup(`
+                                    <div class="popup-content">
+                                        <div class="popup-row"><span class="popup-col"> </span><img class="foto-rs" src=${item.foto_rs} /></div>
+                                        <div class="popup-row"><span class="popup-col">ID RS: ${item.id_rs}</span></div>
+                                        <div class="popup-row"><span class="nama-rs">Nama RS: ${item.nama_rs}</span></div>
+                                        <div class="popup-row"><span class="popup-col">Kelas: ${item.tipe_rs}</span></div>
+                                        <div class="popup-row"><span class="popup-col">LatLng: ${item.latlng}</span></div>
+                                        <div class="popup-buttons">
+                                            <button onclick="editMarker('${item.id_rs}')" type="button" class="btn btn-dark" >Edit</button>
+                                            <button onclick="deleteMarker('${item.id_rs}')" type="button" class="btn btn-dark" >Delete</button>
+                                        </div>
+                                    </div>
+                                `);
+                            });
+                        })
+                        .catch(error => console.error('Error:', error));
                 }
-              </script>
-          </div>
+        
+                function resetMarkers() {
+                    mymap.eachLayer(function(layer) {
+                        if (layer instanceof L.Marker) {
+                            mymap.removeLayer(layer);
+                        }
+                    });
+                }
+        
+                function editMarker(markerId) {
+                    // Logika untuk mengedit marker dengan ID tertentu
+                    console.log('Edit marker with ID:', markerId);
+                }
+        
+                function deleteMarker(markerId) {
+                    // Logika untuk menghapus marker dengan ID tertentu
+                    console.log('Delete marker with ID:', markerId);
+                }
+            </script>
+        </div>
 
           <!-- ======= From Section ======= -->
           <section id="Form" class="form">
@@ -333,7 +362,7 @@
                     <input type="text" class="form-control" id="foto_rs" name="foto_rs" required>
                   </div>
 
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-dark">Submit</button>
                 </form>
               </div>
 
@@ -341,86 +370,50 @@
           </section><!-- End form Section -->
 
           <!-- ======= Resume Section ======= -->
-          <section id="resume" class="resume">
-            <div class="container">
-
-              <div class="section-title">
-                <h2>List Rumah Sakit Terdaftar</h2>
-              </div>
-              <div class="data_rs">
-                @php
-                  $ar_judul = ['No','Nama','LatLng','Tipe','Foto'];
+    <section id="resume" class="resume">
+      <div class="container">
+          <div class="section-title">
+              <h2>List Rumah Sakit Terdaftar</h2>
+          </div>
+          <div class="data_rs">
+              @php
+                  $ar_judul = ['No', 'Nama', 'LatLng', 'Tipe', 'Foto'];
                   $no = 1;
-                @endphp
-                <table id="rsTable">
-                    <thead>
-                        <tr>
+              @endphp
+              <table id="rsTable">
+                  <thead>
+                      <tr>
                           @foreach($ar_judul as $jdl)
                               <th>{{ $jdl }}</th>
                           @endforeach
-                        </tr>
-                    </thead>
-                    <tbody id="rsTableBody">
+                      </tr>
+                  </thead>
+                  <tbody id="rsTableBody">
                       @foreach($data as $d)
                           <tr>
                               <td>{{ $no++ }}</td>
                               <td>{{ $d->nama_rs }}</td>
-                              <td>{{ $d->latlng}}</td>
+                              <td>{{ $d->latlng }}</td>
                               <td>{{ $d->tipe_rs }}</td>
-                              <td><img src="{{ $d->foto_rs }}" alt="Gambar Rumah Sakit"  style="width: 100px; height: 100px; object-fit: cover;"></td>
+                              <td>
+                                  <img src="{{ $d->foto_rs }}" alt="Gambar Rumah Sakit">
+                              </td>
+                              <td>
+                                  {{-- <form method="POST" action="{{ route('data.destroy', $d->id) }}">
+                                      @csrf
+                                      @method('DELETE')
+                                      <button type="submit" class="btn btn-danger btn-sm show-alert-delete-box" title="Hapus Asset">
+                                          <i class="bi bi-trash"></i>
+                                      </button>
+                                  </form> --}}
+                              </td>
                           </tr>
                       @endforeach
-                    </tbody>
-                </table>
-                {{-- <table id="rsTable" class="display">
-                  <thead>
-                    <tr>
-                      @foreach($ar_judul as $jdl)
-                      <th>{{ $jdl }}</th>
-                      @endforeach
-                    </tr>
-                  </thead>
-                  <tbody id="rsTableBody">
-                    @foreach($data->take(10) as $d)
-                    <tr>
-                      <td>{{ $no++ }}</td>
-                      <td>{{ $d->nama_rs }}</td>
-                      <td>{{ $d->latlng}}</td>
-                      <td>{{ $d->tipe_rs }}</td>
-                      <td><img src="{{ $d->foto_rs }}" alt="Gambar Rumah Sakit" style="width: 100px; height: 100px;"></td>
-                    </tr>
-                    @endforeach
                   </tbody>
-                </table> --}}
-            </div>
-            <!-- <script>
-              // Ambil data dari server dan tampilkan dalam tabel
-              fetch('http://localhost:9090/getData')
-              // fetch('http://localhost:9090/getData')
-                .then(response => response.json())
-                .then(data => {
-                  const rsTableBody = document.getElementById('rsTableBody');
-            
-                  data.forEach(rs => {
-                    const row = `
-                      <tr>
-                        <td>${rs.id_rs}</td>
-                        <td>${rs.nama_rs}</td>
-                        <td>${rs.tipe_rs}</td>
-                        <td>${rs.latlng_rs}</td>
-                        <td>${rs.alamat_rs}</td>
-                        <td><img src="http://localhost:9090/getImage/${rs.id_rs} "style="max-width: 400px; max-height: 300px;" alt="Gambar RS"></td>
-                      </tr>
-                    `;
-                    rsTableBody.innerHTML += row;
-                  });
-                })
-                .catch(error => console.error('Error:', error));
-            </script> -->
-              </div>
-
-            </div>
-          </section><!-- End Resume Section -->
+              </table>
+          </div>
+      </div>
+  </section><!-- End Resume Section -->
 
       </div>
   </section>
@@ -468,6 +461,7 @@
   <script src="{{ asset('frontend/vendor/purecounter/purecounter_vanilla.js') }}"></script>
   <script src="{{ asset('frontend/vendor/glightbox/js/glightbox.min.js') }}"></script>
   <script src="{{ asset('frontend/vendor/swiper/swiper-bundle.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/typed.js/typed.umd.js') }}"></script>
   <script src="{{ asset('frontend/vendor/aos/aos.js') }}"></script>
   <script src="{{ asset('frontend/vendor/php-email-form/validate.js') }}"></script>
 
