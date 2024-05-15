@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Route::get('/index', function () {
     return view('frontend.index');
-});
+})->name('frontend.index');
 
 
 
@@ -42,7 +42,11 @@ Route::post('/store-data', [DataController::class, 'storeData'])->name('storeDat
 Route::get('/getMarker', [DataController::class, 'getMarker'])->name('getMarker');
 
 
+Route::delete('/data/{id_rs}', [DataController::class, 'destroy'])->name('data.destroy');
 
+Route::get('/data/{id_rs}/edit', [DataController::class, 'edit'])->name('data.edit');
+
+Route::put('/data/{id_rs}', [DataController::class, 'update'])->name('data.update');
 
 
 

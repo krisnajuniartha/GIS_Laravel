@@ -95,7 +95,7 @@
   <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
     <div class="hero-container" data-aos="fade-in">
       <h1>GIS Rumah Sakit</h1>
-      <p>by <span class="typed" data-typed-items="K, R, I, S, N, A, Krisna"></span></p>
+      <p>by Krisna<span class="typed" data-typed-items="K, R, I, S, N, A, Krisna"></span></p>
     </div>
   </section><!-- End Hero -->
 
@@ -352,11 +352,6 @@
                     <input type="text" class="form-control" id="tipe_rs" name="tipe_rs" required>
                   </div>
 
-                  {{-- <div class="mb-3">
-                    <label for="alamat_rs" class="form-label">Alamat Rumah Sakit</label>
-                    <input type="text" class="form-control" id="alamat_rs" name="alamat_rs" required>
-                  </div> --}}
-
                   <div class="mb-3">
                     <label for="foto_rs" class="form-label">Gambar Rumah Sakit</label>
                     <input type="text" class="form-control" id="foto_rs" name="foto_rs" required>
@@ -377,7 +372,7 @@
           </div>
           <div class="data_rs">
               @php
-                  $ar_judul = ['No', 'Nama', 'LatLng', 'Tipe', 'Foto'];
+                  $ar_judul = ['Nama', 'LatLng', 'Tipe', 'Foto', 'Actions'];
                   $no = 1;
               @endphp
               <table id="rsTable">
@@ -391,7 +386,7 @@
                   <tbody id="rsTableBody">
                       @foreach($data as $d)
                           <tr>
-                              <td>{{ $no++ }}</td>
+                              {{-- <td>{{ $no++ }}</td> --}}
                               <td>{{ $d->nama_rs }}</td>
                               <td>{{ $d->latlng }}</td>
                               <td>{{ $d->tipe_rs }}</td>
@@ -399,13 +394,12 @@
                                   <img src="{{ $d->foto_rs }}" alt="Gambar Rumah Sakit">
                               </td>
                               <td>
-                                  {{-- <form method="POST" action="{{ route('data.destroy', $d->id) }}">
+                                  <a href="{{ route('data.edit', ['id_rs' => $d->id_rs]) }}" class="btn btn-primary">Update</a>
+                                  <form action="{{ route('data.destroy', ['id_rs' => $d->id_rs]) }}" method="POST" style="display:inline;">
                                       @csrf
                                       @method('DELETE')
-                                      <button type="submit" class="btn btn-danger btn-sm show-alert-delete-box" title="Hapus Asset">
-                                          <i class="bi bi-trash"></i>
-                                      </button>
-                                  </form> --}}
+                                      <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this hospital?')">Delete</button>
+                                  </form>
                               </td>
                           </tr>
                       @endforeach

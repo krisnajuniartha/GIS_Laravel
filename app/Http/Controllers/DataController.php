@@ -6,6 +6,8 @@ use App\Models\Data;
 use App\Models\Marker;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class DataController extends Controller
 {
@@ -65,21 +67,55 @@ class DataController extends Controller
         // Logika untuk menampilkan detail pengguna
     }
 // Fungsi untuk menampilkan formulir edit pengguna berdasarkan ID
-    public function edit($id)
+    public function edit($id_rs)
     {
-        // Logika untuk menampilkan formulir edit pengguna pp
+        $row = Data::find($id_rs);
+        return view('form.formdata',compact('row'));
     }
 
     // Fungsi untuk memperbarui pengguna berdasarkan ID
-    public function update(Request $request, $id)
+    
+    public function update(Request $request, $id_rs)
     {
-        // Logika untuk memperbarui pengguna
+        $validatedData = $request->validate([
+            'nama_rs' => 'required',
+            'latlng' => 'required',
+            'tipe_rs' => 'required',
+            'foto_rs' => 'required',
+        ]);
+
+        $data = Data::where('id_rs', $id_rs)->firstOrFail();
+        $data->nama_rs = $validatedData['nama_rs'];
+        $data->latlng = $validatedData['latlng'];
+        $data->tipe_rs = $validatedData['tipe_rs'];
+        $data->foto_rs = $validatedData['foto_rs'];
+
+        // if ($request->hasFile('gambar_rs')) {
+        //     $gambarData = file_get_contents($request->file('gambar_rs')->getRealPath());
+        //     $data->gambar_rs = $gambarData;
+        // }
+
+        DB::table('tb_rs')->where('id_rs',$id_rs)->update(
+            [
+                'nama_rs'=>$request->nama_rs,
+                'latlng'=>$request->latlng,
+                'tipe_rs'=>$request->tipe_rs,
+                'foto_rs'=>$request->foto_rs,
+            ]);
+       
+        return redirect('/index')->with('success','Data Berhasil Diubah');
     }
 
+
     // Fungsi untuk menghapus pengguna berdasarkan ID
-    public function destroy($id)
+    public function destroy($id_rs)
     {
-        Data::where('id',$id)->delete();
-        return view('backend.index')->with('success','Data Berhasil Dihapus');
+        // Data::where('id',$id_rs)->delete();
+        // return view('frontend.index')->with('success','Data Berhasil Dihapus');
+
+        $data = Data::findOrFail($id_rs);
+        $data->delete();
+
+        return redirect('/index')->with('success', 'Hospital deleted successfully');
     }
 }
